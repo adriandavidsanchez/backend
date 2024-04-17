@@ -1,7 +1,7 @@
 package com.biblioteca.backend.Services;
 
-import com.biblioteca.backend.entities.Libro;
 import java.util.List;
+import com.biblioteca.backend.model.Libro;
 
 public interface LibroService {
 
@@ -16,5 +16,9 @@ public interface LibroService {
     void eliminarLibro(Long id);
 
     Long contarLibros();
+
+    List<Libro> buscarLibro (String criterio);
+
+    boolean estaDisponible(Long id);
 }
     

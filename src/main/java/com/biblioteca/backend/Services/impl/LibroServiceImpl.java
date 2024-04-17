@@ -4,7 +4,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.biblioteca.backend.Services.LibroService;
-import com.biblioteca.backend.entities.Libro;
+import com.biblioteca.backend.model.Libro;
+import java.util.ArrayList;
 import repository.LibroRepository;
 
 @Service
@@ -50,5 +51,25 @@ public class LibroServiceImpl implements LibroService {
         return libroRepository.count();
     }
 
+    @Override
+    public List<Libro> buscarLibro(String criterio){
+        List<Libro> resultados = new ArrayList<>();
+        for (Libro libro : obtenerTodosLibros()) {
+            if (libro.getTitulo().toLowerCase().contains(criterio.toLowerCase()) ||
+                    libro.getAutor().toLowerCase().contains(criterio.toLowerCase()) ||
+                    libro.getCategoria().toLowerCase().contains(criterio.toLowerCase())) {
+                resultados.add(libro);
+            }
+        }
+        return resultados;
+    }
+
+    @Override
+    public boolean estaDisponible(Long id) {
+        
+        return false;
+    }
+
+    
     
 }

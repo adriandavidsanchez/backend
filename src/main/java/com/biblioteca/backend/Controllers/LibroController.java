@@ -1,18 +1,18 @@
 package com.biblioteca.backend.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import java.util.List;
 import com.biblioteca.backend.Services.LibroService;
-import com.biblioteca.backend.entities.Libro;
+import com.biblioteca.backend.model.Libro;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 
-@Controller
-@RequestMapping("/Libros")
+@RestController
+@RequestMapping("/libros")
 public class LibroController {
 
     @Autowired
@@ -22,7 +22,9 @@ public class LibroController {
     @GetMapping
     public String listarLibros(Model model){
         List<Libro> libros = libroService.obtenerTodosLibros();
-        model.addAttribute("ListaDelibros", libros);
-        return "Lista";
+        model.addAttribute("listaDelibros", libros);
+        return "lista";
     }
+
+    
 }

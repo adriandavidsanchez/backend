@@ -1,7 +1,7 @@
 package com.biblioteca.backend.Services;
 
-import com.biblioteca.backend.entities.Usuario;
 import java.util.List;
+import com.biblioteca.backend.model.Usuario;
 
 public interface UsuarioService {
 
@@ -16,4 +16,8 @@ public interface UsuarioService {
     void eliminarUsuario(Long id);
 
     Long contarUsuarios();
+
+    List<Usuario> buscarUsuario (String criterio);
+
+    Usuario iniciarSecionUsuario(String email, String contrasenia);
 }

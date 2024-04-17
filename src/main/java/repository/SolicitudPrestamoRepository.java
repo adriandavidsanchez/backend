@@ -2,9 +2,9 @@ package repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.biblioteca.backend.model.Libro;
+import com.biblioteca.backend.model.SolicitudPrestamo;
 
 @Repository
-public interface LibroRepository extends JpaRepository <Libro, Long>{
+public interface SolicitudPrestamoRepository extends JpaRepository<SolicitudPrestamo, Long> {
 
 }

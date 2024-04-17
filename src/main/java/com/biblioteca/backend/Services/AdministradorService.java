@@ -1,7 +1,7 @@
 package com.biblioteca.backend.Services;
 
-import com.biblioteca.backend.entities.Administrador;
 import java.util.List;
+import com.biblioteca.backend.model.Administrador;
 
 public interface AdministradorService {
 
@@ -16,4 +16,6 @@ public interface AdministradorService {
     void eliminarAdministrador(Long id);
 
     Long contarAdministradores();
+
+    Administrador iniciarSecionAdministrador(String email, String contrasenia);
 }

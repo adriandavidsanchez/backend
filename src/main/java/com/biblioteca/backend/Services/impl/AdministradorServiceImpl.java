@@ -1,11 +1,11 @@
 package com.biblioteca.backend.Services.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.biblioteca.backend.Services.AdministradorService;
-import com.biblioteca.backend.entities.Administrador;
+import com.biblioteca.backend.model.Administrador;
 import repository.AdministradorRepository;
 
 @Service
@@ -14,11 +14,14 @@ public class AdministradorServiceImpl  implements AdministradorService{
     @Autowired
     private AdministradorRepository administradorRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder contraseniaEnconder;
+
     @Override
     public Administrador actualizarAdministrador(Long id, Administrador administrador) {
         Administrador administradorBBDD = administradorRepository.findById(id).orElse(null);
         if ((administradorBBDD != null)) {
-            administradorBBDD.setCorreo(administrador.getCorreo());
+            administradorBBDD.setEmail(administrador.getEmail());
             administradorBBDD.setNombre(administrador.getNombre());
             return administradorRepository.save(administradorBBDD);
         }
@@ -49,5 +52,16 @@ public class AdministradorServiceImpl  implements AdministradorService{
     public Administrador obtenerPorIdAministradores(Long id) {
         return administradorRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public Administrador iniciarSecionAdministrador(String email, String contrasenia) {
+        
+        Administrador administrador= administradorRepository.findByEmail(email);
+        if (administrador == null || !contraseniaEnconder.matches(administrador.getEmail(), contrasenia)) {
+            throw new RuntimeException("Correo electrónico o contraseña incorrectos");
+        }
+        return administrador;
+    }
+    
 
 }
