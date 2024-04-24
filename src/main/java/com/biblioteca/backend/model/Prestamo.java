@@ -6,12 +6,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "Prestamos")
@@ -24,6 +29,17 @@ public class Prestamo {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
+        @ManyToOne
+        @JoinColumn(name = "usuario_id")
+        private Usuario usuario;
+
+        @ManyToOne
+        @JoinColumn(name = "libro_id")
+        private Libro libro;
+
+        @OneToMany(mappedBy = "Prestamo]")
+        private List <SolicitudPrestamo> solicitudPrestamoLibro = new ArrayList<>();
+
         @Temporal(TemporalType.DATE)
         @Column(name = "fecha_prestamo")
         private Date fechaPrestamo;
@@ -34,10 +50,6 @@ public class Prestamo {
 
         @Column(name = "estado")
         private String estado;
-
-        private Usuario usuario;
-
-        private Libro libro;
 
         public Prestamo(Libro libro, Usuario usuario, Date fechaPrestamo, Date fechaDevolucion, String estado) {
                 this.libro = libro;

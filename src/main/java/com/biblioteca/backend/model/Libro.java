@@ -1,11 +1,14 @@
 package com.biblioteca.backend.model;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -22,7 +25,13 @@ public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    @OneToMany(mappedBy = "Libro")
+    private List<Prestamo> prestamos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "Libro")
+    private List<SolicitudPrestamo> solicitudPrestamos = new ArrayList<>();
+
     @NotBlank
     @Column(name = "titulo")
     private String titulo;
@@ -35,6 +44,6 @@ public class Libro {
     @Column(name = "categoria")
     private String categoria;
 
-    //private boolean disponibilidadLibro;
-    
+    // private boolean disponibilidadLibro;
+
 }
