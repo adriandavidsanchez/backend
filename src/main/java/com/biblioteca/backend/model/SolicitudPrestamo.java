@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Solicitudes_Prestamos")
+@Table(name = "Solicitud_Prestamo")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,4 +39,6 @@ public class SolicitudPrestamo {
 
     @Temporal(TemporalType.DATE)
     private Date fechaSolicitudPrestamo;
+
+    private String estado;
 }

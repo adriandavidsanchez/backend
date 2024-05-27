@@ -8,15 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
-import java.util.ArrayList;
 
 @Entity
 @Table(name = "Prestamos")
@@ -30,22 +27,19 @@ public class Prestamo {
         private Long id;
 
         @ManyToOne
-        @JoinColumn(name = "usuario_id")
+        @JoinColumn(name = "usuario_Id")
         private Usuario usuario;
 
         @ManyToOne
-        @JoinColumn(name = "libro_id")
+        @JoinColumn(name = "libro_Id")
         private Libro libro;
 
-        @OneToMany(mappedBy = "Prestamo]")
-        private List <SolicitudPrestamo> solicitudPrestamoLibro = new ArrayList<>();
-
         @Temporal(TemporalType.DATE)
-        @Column(name = "fecha_prestamo")
+        @Column(name = "fecha_Prestamo")
         private Date fechaPrestamo;
 
         @Temporal(TemporalType.DATE)
-        @Column(name = "fecha_devolucion")
+        @Column(name = "fecha_Devolucion")
         private Date fechaDevolucion;
 
         @Column(name = "estado")

@@ -3,7 +3,7 @@ package com.biblioteca.backend.Services.impl;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.biblioteca.backend.Services.UsuarioService;
 import com.biblioteca.backend.model.Usuario;
@@ -17,14 +17,18 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private BCryptPasswordEncoder contraseniaEnconder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Usuario actualizarUsuario(Long id, Usuario usuario) {
         Usuario usuarioBBDD = usuarioRepository.findById(id).orElse(null);
         if (usuarioBBDD != null) {
             usuarioBBDD.setNombre(usuario.getNombre());
+            usuarioBBDD.setApellido(usuario.getApellido());
             usuarioBBDD.setEmail(usuario.getEmail());
+            usuarioBBDD.setFechaNacimiento(usuario.getFechaNacimiento());
+            usuarioBBDD.setNumeroContacto(usuario.getNumeroContacto());
+            usuarioBBDD.setDireccion(usuario.getDireccion());
             return usuarioRepository.save(usuarioBBDD);
         }
         return null;
@@ -33,11 +37,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void eliminarUsuario(Long id) {
         usuarioRepository.deleteById(id);
-    }
-
-    @Override
-    public Usuario ingresarUsuarioNuevo(Usuario usuario) {
-        return usuarioRepository.save(usuario);
     }
 
     @Override
@@ -61,7 +60,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         for (Usuario usuario : obtenerTodosUsuarios()) {
             if (usuario.getNombre().toLowerCase().contains(criterio.toLowerCase()) ||
                     usuario.getApellido().toLowerCase().contains(criterio.toLowerCase()) ||
-                    usuario.getNumeroDocumento().toLowerCase().contains(criterio.toLowerCase())) {
+                    usuario.getEmail().toLowerCase().contains(criterio.toLowerCase())) {
                 resultados.add(usuario);
             }
         }
@@ -70,12 +69,23 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario iniciarSecionUsuario(String email, String contrasenia) {
-
+        //se busca en la base de datos el usuario
         Usuario usuario = usuarioRepository.findByEmail(email);
-        if (usuario == null || !contraseniaEnconder.matches(usuario.getEmail(), contrasenia)) {
+        //ver si el correo electronico y la contrasenia se encuentra en la base de datos
+        if (usuario == null || !passwordEncoder.matches(usuario.getEmail(), contrasenia)) {
             throw new RuntimeException("Correo electrónico o contraseña incorrectos");
         }
         return usuario;
     }
 
+    @Override
+    public Usuario crearUsuario(Usuario usuario) {
+        //verificar si el correo ya esta registrado
+        if(usuarioRepository.findByEmail(usuario.getEmail()) != null){
+            throw new RuntimeException("El correo electrónico ya está registrado");
+        }
+        //codificar la catrasenia antes de guardar el usuario
+        usuario.setContrasenia(passwordEncoder.encode(usuario.getContrasenia()));
+        return usuarioRepository.save(usuario);
+    }
 }

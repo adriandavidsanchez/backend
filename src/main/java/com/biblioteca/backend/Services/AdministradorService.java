@@ -1,7 +1,7 @@
 package com.biblioteca.backend.Services;
 
 import java.util.List;
-import com.biblioteca.backend.model.Administrador;
+import com.biblioteca.backend.model.Administrador; 
 
 public interface AdministradorService {
 
@@ -18,4 +18,6 @@ public interface AdministradorService {
     Long contarAdministradores();
 
     Administrador iniciarSecionAdministrador(String email, String contrasenia);
+
+    Administrador crearAdministrador(Administrador administrador);
 }

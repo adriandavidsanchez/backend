@@ -9,8 +9,6 @@ public interface UsuarioService {
 
     Usuario obtenerPorUsuarioId(Long id);
 
-    Usuario ingresarUsuarioNuevo(Usuario usuario);
-
     Usuario actualizarUsuario(Long id,Usuario usuario);
 
     void eliminarUsuario(Long id);
@@ -20,4 +18,6 @@ public interface UsuarioService {
     List<Usuario> buscarUsuario (String criterio);
 
     Usuario iniciarSecionUsuario(String email, String contrasenia);
+
+    Usuario crearUsuario (Usuario usuario);
 }

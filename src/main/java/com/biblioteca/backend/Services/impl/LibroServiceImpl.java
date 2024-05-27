@@ -14,13 +14,14 @@ public class LibroServiceImpl implements LibroService {
     @Autowired
     private LibroRepository libroRepository;
 
-    @Override
+    @Override//
     public Libro actualizarLibro(Long id, Libro libro) {
         Libro libroBBDD = libroRepository.findById(id).orElse(null);
         if(libroBBDD != null){
             libroBBDD.setTitulo(libro.getTitulo());
             libroBBDD.setAutor(libro.getAutor());
             libroBBDD.setCategoria(libro.getCategoria());
+            libroBBDD.setDisponibilidadLibro(libro.isDisponibilidadLibro());
             return libroRepository.save(libroBBDD);
         }
         return null;
@@ -67,9 +68,8 @@ public class LibroServiceImpl implements LibroService {
     @Override
     public boolean estaDisponible(Long id) {
         
-        return false;
+        return libroRepository.findById(id)
+                .map(Libro:: isDisponibilidadLibro)
+                .orElse(false);
     }
-
-    
-    
 }

@@ -21,4 +21,3 @@ public interface LibroService {
 
     boolean estaDisponible(Long id);
 }
-    

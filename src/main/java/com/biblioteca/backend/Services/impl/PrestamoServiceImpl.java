@@ -6,7 +6,9 @@ import java.util.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.biblioteca.backend.Services.PrestamoService;
+import repository.LibroRepository;
 import repository.PrestamoRepository;
+import repository.UsuarioRepository;
 import com.biblioteca.backend.model.*;
 
 @Service
@@ -15,22 +17,28 @@ public class PrestamoServiceImpl implements PrestamoService {
     @Autowired
     private PrestamoRepository prestamoRepository;
 
-    @Override
+    @Autowired
+    private LibroRepository libroRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    /*  @Override
     public Prestamo actualizarPrestamo(Long id, Prestamo prestamo) {
-        // TODO Auto-generated method stub
+        
         return null;
-    }
+    }*/
 
     @Override
     public Long contarPrestamos() {
         return prestamoRepository.count();
     }
 
-    @Override
+    /*  @Override
     public Prestamo ingresarPrestamoNuevo(Prestamo prestamo) {
-        // TODO Auto-generated method stub
+        
         return null;
-    }
+    }*/
 
     @Override
     public List<Prestamo> obtenerListaPrestamos() {
@@ -49,5 +57,47 @@ public class PrestamoServiceImpl implements PrestamoService {
         prestamoRepository.save(prestamo);
     }
 
-    
+    @Override
+    public Prestamo crearPrestamo(Long usuarioId, Long libroId) {
+        
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Libro libro = libroRepository.findById(libroId).orElseThrow(() -> new RuntimeException("Libro no encontrado"));
+
+        if (!libro.isDisponibilidadLibro()) {
+            throw new RuntimeException("El libro no está disponible para préstamo");
+        }
+
+        libro.setDisponibilidadLibro(false);
+        libroRepository.save(libro);
+
+        Prestamo prestamo = new Prestamo();
+        prestamo.setUsuario(usuario);
+        prestamo.setLibro(libro);
+        prestamo.setEstado("ACTIVO");
+
+        return prestamoRepository.save(prestamo);
+    }
+
+    @Override
+    public Prestamo obtenerPrestamosPorId(Long id) {
+
+        return prestamoRepository.findById(id).orElseThrow(()-> new RuntimeException("Préstamo no encontrado"));
+    }
+
+    @Override
+    public Prestamo finalizarPrestamo(Long id) {
+
+        Prestamo prestamo = prestamoRepository.findById(id).orElseThrow(() -> new RuntimeException("Préstamo no encontrado"));
+        if ("FINALIZADO".equals(prestamo.getEstado())) {
+            throw new RuntimeException("El préstamo ya ha sido finalizado");
+        }
+
+        Libro libro = prestamo.getLibro();
+        libro.setDisponibilidadLibro(true);
+        libroRepository.save(libro);
+
+        prestamo.setEstado("FINALIZADO");
+        return prestamoRepository.save(prestamo);
+    }
+
 }
